@@ -1,6 +1,6 @@
 //META{"name":"ChannelPopouts","displayName":"ChannelPopouts","website":"","source":""}*//
 
-let ChannelPopoutOnMouseEnter = function onMouseEnter(){
+function ChannelPopoutOnMouseEnter(){
     let wrapper = document.createElement('div');
     let buttonLeft = parseInt(document.getElementsByName('ChannelPopout')[0].getBoundingClientRect().left) - 34;
     let buttonTop = parseInt(document.getElementsByName('ChannelPopout')[0].getBoundingClientRect().top) + 25;
@@ -8,27 +8,22 @@ let ChannelPopoutOnMouseEnter = function onMouseEnter(){
     document.querySelector('.tooltips').appendChild(wrapper.firstChild);
 };
 
-let ChannelPopoutOnMouseLeave = function onMouseLeave(){
+function ChannelPopoutOnMouseLeave(){
     document.querySelector('.ChannelPopoutIcon').remove();
 };
 
-let ChannelPopoutOnMouseClick = function onMouseClick(){
-    const remote = require('electron').remote;
-    const BrowserWindow = remote.BrowserWindow;
+function ChannelPopoutOnMouseClick(){
+    const BrowserWindow = require("electron").remote.BrowserWindow;
+    const win = new BrowserWindow({webPreferences: {preload: " "}, title: "Discord", frame: false, width: 800, height: 600});
 
-    var win = new BrowserWindow({ width: 800, height: 600, title: 'Discord', frame: false});
     win.on('close', () => {
         win.destroy();
     }); 
     win.loadURL(window.location.href);
-    win.webContents.executeJavaScript(`document.querySelector('.channels-Ie2l6A').style.display = 'none'; document.querySelector('.guilds-wrapper').style.display = 'none';`);
-    win.webContents.executeJavaScript(`var _betterDiscord = require(process.env.APPDATA + '/discord/0.0.301/modules/discord_desktop_core/node_modules/BetterDiscord');`);
-    win.webContents.executeJavaScript(`var _betterDiscord2 = new _betterDiscord.BetterDiscord(require('electron').remote.getCurrentWindow());`);
-
-    var _betterDiscord2 = new _betterDiscord.BetterDiscord(win);
+    win.webContents.executeJavaScript(`document.querySelector('.channels-Ie2l6A').style.display = 'none'; document.querySelector('.guildsWrapper-5TJh6A').style.display = 'none';`);
 };
 
-let ChannelPopoutInjectHTML = function injectHTML(icon){
+const ChannelPopoutInjectHTML = function injectHTML(icon){
     let wrapper = document.createElement('div');
 
     if(icon && !document.getElementsByName("ChannelPopout")[0]){
@@ -49,20 +44,19 @@ let ChannelPopoutInjectHTML = function injectHTML(icon){
             </svg>
         </span>`;
         icon.parentNode.prepend(wrapper.firstChild);
-        
-        document.getElementsByName("ChannelPopout")[0].setAttribute("onmouseenter", "ChannelPopoutOnMouseEnter()");
-        document.getElementsByName("ChannelPopout")[0].setAttribute("onmouseleave", "ChannelPopoutOnMouseLeave()");
-        document.getElementsByName("ChannelPopout")[0].setAttribute("onclick", "ChannelPopoutOnMouseClick()");
+        document.getElementsByName("ChannelPopout")[0].onmouseenter = ChannelPopoutOnMouseEnter;
+        document.getElementsByName("ChannelPopout")[0].onmouseleave = ChannelPopoutOnMouseLeave;
+        document.getElementsByName("ChannelPopout")[0].onmouseup = ChannelPopoutOnMouseClick;
     }
 }
 
-let ChannelPopoutRemoveHTML = function removeHTML(){
+const ChannelPopoutRemoveHTML = function removeHTML(){
     document.getElementsByName("ChannelPopout")[0].remove();
 }
 
 
 var ChannelPopouts = (() => {
-    const config = {"info":{"name":"ChannelPopouts","authors":[{"name":"Green","discord_id":"80593258903773184","github_username":"greentwilight"}],"version":"1.0.0","description":"ChannelPopouts","github":"","github_raw":"https://raw.githubusercontent.com/Greentwilight/ChannelPopouts/master/ChannelPopouts.plugin.js"},"changelog":[{"title":"New Stuff","items":["Added more settings","Added changelog"]},{"title":"Bugs Squashed","type":"fixed","items":["React errors on reload"]},{"title":"Improvements","type":"improved","items":["Improvements to the base plugin"]},{"title":"On-going","type":"progress","items":["More modals and popouts being added","More classes and modules being added"]}],"main":"index.js"};
+    const config = {"info":{"name":"ChannelPopouts","authors":[{"name":"Green","discord_id":"80593258903773184","github_username":"Curtis-D"}],"version":"1.0.0","description":"Allows you to popout DMs/Servers to view more than one DM/Server at a time.","github":"","github_raw":"https://raw.githubusercontent.com/Curtis-D/ChannelPopouts/master/ChannelPopouts.plugin.js"},"main":"index.js"};
 
     return !global.ZeresPluginLibrary ? class {
         getName() {return config.info.name;} getAuthor() {return config.info.authors.map(a => a.name).join(", ");} getDescription() {return config.info.description;} getVersion() {return config.info.version;}
