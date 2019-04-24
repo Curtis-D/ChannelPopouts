@@ -43,7 +43,7 @@ const ChannelPopoutInjectHTML = function injectHTML(icon){
 
     if(icon && !document.getElementsByName("ChannelPopout")[0]){
         wrapper.innerHTML = `<span tabindex="0" class="iconWrapper-2OrFZ1 clickable-3rdHwn" role="button">
-            <svg name="ChannelPopout" class="iconInactive-g2AXfB icon-22AiRD iconMargin-2YXk4F" width="16" height="16" viewBox="-8 -8 70 80" fill="none">
+            <svg name="ChannelPopout" class="iconInactive-g2AXfB icon-22AiRD iconMargin-2YXk4F" width="16" height="16" viewBox="-8 -8 80 80" fill="none">
                 <g>
                     <g>
                         <g>
