@@ -91,7 +91,7 @@ var ChannelPopouts = (() => {
             Logger.log("Started");
             Library.PluginUpdater.checkForUpdate(config.info.name, config.info.version, config.info.github_raw);
             if(document.getElementsByName("Nova_Pin")[0]&&!document.getElementsByName("ChannelPopout")[0])ChannelPopoutInjectHTML(document.getElementsByName("Nova_Pin")[0].parentNode);
-            BdApi.injectCSS(`${config.info.name}CSS`,`.toolbar-1t6TWx .clickable-3rdHwn .icon-22AiRD.CPOs{fill:#b9bbbe}.toolbar-1t6TWx .clickable-3rdHwn:hover .icon-22AiRD.CPOs{fill:#dcddde}`);
+            if(!document.getElementById(`${config.info.name}CSS`))BdApi.injectCSS(`${config.info.name}CSS`,`.toolbar-1t6TWx .clickable-3rdHwn .icon-22AiRD.CPOs{fill:#b9bbbe}.toolbar-1t6TWx .clickable-3rdHwn:hover .icon-22AiRD.CPOs{fill:#dcddde}`);
         }
 
         onStop() {
