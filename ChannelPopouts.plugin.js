@@ -1,12 +1,13 @@
 //META{"name":"ChannelPopouts","displayName":"ChannelPopouts","website":"https://github.com/Curtis-D","source":"https://github.com/Curtis-D/ChannelPopouts/blob/master/ChannelPopouts.plugin.js"}*//
 
 function ChannelPopoutOnMouseEnter(){
-    let wrapper = document.createElement('div');
-    let buttonLeft = parseInt(document.getElementsByName('ChannelPopout')[0].getBoundingClientRect().left)-62;
-    let buttonTop = parseInt(document.getElementsByName('ChannelPopout')[0].getBoundingClientRect().top)+25;
-	wrapper.innerHTML=`<div class='layer-v9HyYc ChannelPopoutIcon' style='left:${buttonLeft.toString()}px;top:${buttonTop.toString()}px;'>
-							<div class='tooltip-2QfLtc da-tooltip tooltipBottom-3ARrEK tooltipBlack-PPG47z'>
-								<div class="tooltipPointer-3ZfirK da-tooltipPointer"></div>
+	let wrapper = document.createElement('div'),
+	tooltips=BdApi.findModuleByProps('tooltip','tooltipBottom'),
+	buttonLeft=parseInt(document.getElementsByName('ChannelPopout')[0].getBoundingClientRect().left)-62,
+	buttonTop=parseInt(document.getElementsByName('ChannelPopout')[0].getBoundingClientRect().top)+25;
+	wrapper.innerHTML=`<div class='ChannelPopoutIcon ${BdApi.findModuleByProps('layer').layer.split(' ')[0]}' style='left:${buttonLeft.toString()}px;top:${buttonTop.toString()}px;'>
+							<div class='${tooltips.tooltip.split(' ')[0]} ${tooltips.tooltipBottom.split(' ')[0]} ${tooltips.tooltipBlack.split(' ')[0]}'>
+								<div class="${tooltips.tooltipPointer.split(' ')[0]}"></div>
 								Popout Channel/DM
 							</div>
 						</div>`;
@@ -39,11 +40,11 @@ function ChannelPopoutOnMouseClick(){
 };
 
 const ChannelPopoutInjectHTML = function injectHTML(icon){
-    let wrapper = document.createElement('div');
+    let wrapper=document.createElement('div'),titleContainer=BdApi.findModuleByProps('toolbar','iconWrapper');
 
     if(icon && !document.getElementsByName("ChannelPopout")[0]){
-        wrapper.innerHTML = `<span tabindex="0" class="iconWrapper-2OrFZ1 clickable-3rdHwn" role="button">
-            <svg name="ChannelPopout" class="CPOs iconInactive-g2AXfB icon-22AiRD iconMargin-2YXk4F" width="16" height="16" viewBox="-8 -8 80 80" fill="none">
+        wrapper.innerHTML = `<span tabindex="0" class="${titleContainer.iconWrapper.split(' ')[0]} ${titleContainer.clickable.split(' ')[0]}" role="button">
+            <svg name="ChannelPopout" class="ChannelPopouts iconInactive-g2AXfB ${titleContainer.icon.split(' ')[0]} iconMargin-2YXk4F" width="16" height="16" viewBox="-8 -8 80 80" fill="none">
                 <g>
                     <g>
                         <g>
@@ -91,7 +92,7 @@ var ChannelPopouts = (() => {
             Logger.log("Started");
             Library.PluginUpdater.checkForUpdate(config.info.name, config.info.version, config.info.github_raw);
             if(document.getElementsByName("Nova_Pin")[0]&&!document.getElementsByName("ChannelPopout")[0])ChannelPopoutInjectHTML(document.getElementsByName("Nova_Pin")[0].parentNode);
-            if(!document.getElementById(`${config.info.name}CSS`))BdApi.injectCSS(`${config.info.name}CSS`,`.toolbar-1t6TWx .clickable-3rdHwn .icon-22AiRD.CPOs{fill:#b9bbbe}.toolbar-1t6TWx .clickable-3rdHwn:hover .icon-22AiRD.CPOs{fill:#dcddde}`);
+            if(!document.getElementById(`${config.info.name}CSS`))BdApi.injectCSS(`${config.info.name}CSS`,`.toolbar-1t6TWx .clickable-3rdHwn .icon-22AiRD.ChannelPopouts{fill:#b9bbbe}.toolbar-1t6TWx .clickable-3rdHwn:hover .icon-22AiRD.ChannelPopouts{fill:#dcddde}`);
         }
 
         onStop() {
