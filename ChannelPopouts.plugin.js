@@ -2,12 +2,12 @@
 
 function ChannelPopoutOnMouseEnter(){
     let wrapper = document.createElement('div');
-    let buttonLeft = parseInt(document.getElementsByName('ChannelPopout')[0].getBoundingClientRect().left) - 34;
-    let buttonTop = parseInt(document.getElementsByName('ChannelPopout')[0].getBoundingClientRect().top) + 25;
+    let buttonLeft = parseInt(document.getElementsByName('ChannelPopout')[0].getBoundingClientRect().left)-62;
+    let buttonTop = parseInt(document.getElementsByName('ChannelPopout')[0].getBoundingClientRect().top)+25;
 	wrapper.innerHTML=`<div class='layer-v9HyYc ChannelPopoutIcon' style='left:${buttonLeft.toString()}px;top:${buttonTop.toString()}px;'>
 							<div class='tooltip-2QfLtc da-tooltip tooltipBottom-3ARrEK tooltipBlack-PPG47z'>
 								<div class="tooltipPointer-3ZfirK da-tooltipPointer"></div>
-								Popout DM
+								Popout Channel/DM
 							</div>
 						</div>`;
     document.querySelector('.layerContainer-yqaFcK').appendChild(wrapper.firstChild); /*Tooltips*/
