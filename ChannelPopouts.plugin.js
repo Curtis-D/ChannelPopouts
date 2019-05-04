@@ -2,10 +2,10 @@
 
 function ChannelPopoutOnMouseEnter(){
     let wrapper = document.createElement('div');
-    let buttonLeft = parseInt(document.getElementsByName('ChannelPopout')[0].getBoundingClientRect().left) - 34;
+    let buttonLeft = parseInt(document.getElementsByName('ChannelPopout')[0].getBoundingClientRect().left) - 36;
     let buttonTop = parseInt(document.getElementsByName('ChannelPopout')[0].getBoundingClientRect().top) + 25;
-    wrapper.innerHTML = `<div class='tooltip tooltip-bottom tooltip-black ChannelPopoutIcon' style='left: ` + buttonLeft.toString() + `px; top: ` + buttonTop.toString() + `px;'>Popout DM</div>`;
-    document.querySelector('.tooltips').appendChild(wrapper.firstChild);
+    wrapper.innerHTML = `<div class='layer-v9HyYc da-layer ChannelPopoutIcon' style='left: ` + buttonLeft.toString() + `px; top: ` + buttonTop.toString() + `px;'><div class="tooltip-2QfLtc tooltipBottom-3ARrEK tooltipBlack-PPG47z"><div class="tooltipPointer-3ZfirK da-tooltipPointer"></div>Popout Chat</div></div>`;
+    document.querySelector('.layerContainer-yqaFcK').appendChild(wrapper.firstChild);
 };
 
 function ChannelPopoutOnMouseLeave(){
@@ -25,7 +25,7 @@ function ChannelPopoutOnMouseClick(){
     }
     win.webContents.once('did-finish-load', () => {
         win.webContents.executeJavaScript(`document.querySelector('.channels-Ie2l6A').style.display = 'none';
-        document.querySelector('.guildsWrapper-5TJh6A').style.display = 'none';`);
+        document.querySelector('.wrapper-1Rf91z').style.display = 'none';`);
         if(isMac){
             win.webContents.executeJavaScript('document.getElementsByClassName("macButtonClose-MwZ2nf")[0].addEventListener("click", _ => {const w = require("electron").remote.getCurrentWindow(); w.close(); w.destroy();})');
         }
@@ -37,8 +37,8 @@ const ChannelPopoutInjectHTML = function injectHTML(icon){
     let wrapper = document.createElement('div');
 
     if(icon && !document.getElementsByName("ChannelPopout")[0]){
-        wrapper.innerHTML = `<span tabindex="0" class="iconMargin-2YXk4F da-iconMargin" role="button">
-            <svg class="iconInactive-g2AXfB icon-1R19_H iconMargin-2YXk4F" name="ChannelPopout" width="16" height="16" viewBox="-8 -8 80 80" fill = "#fff">
+        wrapper.innerHTML = `<div tabindex="0" class="iconWrapper-2OrFZ1 da-iconWrapper clickable-3rdHwn da-clickable" role="button">
+            <svg class="icon-22AiRD da-icon" name="ChannelPopout" width="16" height="16" viewBox="-8 -8 80 80" fill = "currentColor">
                 <g>
                     <g>
                         <g>
@@ -52,7 +52,7 @@ const ChannelPopoutInjectHTML = function injectHTML(icon){
                     </g>
                 </g>
             </svg>
-        </span>`;
+        </div>`;
         icon.parentNode.prepend(wrapper.firstChild);
         document.getElementsByName("ChannelPopout")[0].onmouseenter = ChannelPopoutOnMouseEnter;
         document.getElementsByName("ChannelPopout")[0].onmouseleave = ChannelPopoutOnMouseLeave;
@@ -85,8 +85,8 @@ var ChannelPopouts = (() => {
         onStart() {
             Logger.log("Started");
             Library.PluginUpdater.checkForUpdate(config.info.name, config.info.version, config.info.github_raw);
-            if(document.getElementsByName("Pin")[0] && !document.getElementsByName("ChannelPopout")[0]){
-                ChannelPopoutInjectHTML(document.getElementsByName("Pin")[0].parentNode);
+            if(document.getElementsByName("Nova_Pin")[0] && !document.getElementsByName("ChannelPopout")[0]){
+                ChannelPopoutInjectHTML(document.getElementsByName("Nova_Pin")[0].parentNode);
             }
             
         }
@@ -97,7 +97,7 @@ var ChannelPopouts = (() => {
         }
 
         observer(e){
-            if(e.addedNodes[0] && e.addedNodes[0].classList && e.addedNodes[0].getAttribute("name") === "Pin" && !document.getElementsByName("ChannelPopout")[0]){
+            if(e.addedNodes[0] && e.addedNodes[0].classList && e.addedNodes[0].getAttribute("name") === "Nova_Pin" && !document.getElementsByName("ChannelPopout")[0]){
                 let wrapper = document.createElement('div');
                 ChannelPopoutInjectHTML(e.addedNodes[0].parentNode);
             }
