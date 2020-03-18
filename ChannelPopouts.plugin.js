@@ -3,9 +3,9 @@
 function ChannelPopoutOnMouseEnter(){
     let wrapper = document.createElement('div');
     let buttonLeft = parseInt(document.getElementsByName('ChannelPopout')[0].getBoundingClientRect().left) - 36;
-    let buttonTop = parseInt(document.getElementsByName('ChannelPopout')[0].getBoundingClientRect().top) + 25;
+    let buttonTop = parseInt(document.getElementsByName('ChannelPopout')[0].getBoundingClientRect().top) + 32;
     wrapper.innerHTML = `<div class='layer-v9HyYc da-layer ChannelPopoutIcon' style='left: ` + buttonLeft.toString() + `px; top: ` + buttonTop.toString() + `px;'><div class="tooltip-2QfLtc tooltipBottom-3ARrEK tooltipBlack-PPG47z"><div class="tooltipPointer-3ZfirK da-tooltipPointer"></div>Popout Chat</div></div>`;
-    document.querySelector('.layerContainer-yqaFcK').appendChild(wrapper.firstChild);
+    document.querySelector('[data-no-focus-lock] .layerContainer-yqaFcK').appendChild(wrapper.firstChild);
 };
 
 function ChannelPopoutOnMouseLeave(){
@@ -23,13 +23,19 @@ function ChannelPopoutOnMouseClick(){
             win.destroy();
         });
     }
-    win.webContents.once('did-finish-load', () => {
-        win.webContents.executeJavaScript(`document.querySelector('.channels-Ie2l6A').style.display = 'none';
-        document.querySelector('.wrapper-1Rf91z').style.display = 'none';`);
+    let chatPopoutLoaded = () => {
+        // Hides server and channel list along w/ ensuring the chat itself takes up the full width of the window
+        win.webContents.executeJavaScript(`var head = document.getElementsByTagName("head")[0];
+        var popoutStyle = document.createElement('style');
+        popoutStyle.innerText = '.sidebar-2K8pFh, .wrapper-1Rf91z {display: none!important;} .base-3dtUhz {left: 0!important;}';
+        head.appendChild(popoutStyle)`);
         if(isMac){
             win.webContents.executeJavaScript('document.getElementsByClassName("macButtonClose-MwZ2nf")[0].addEventListener("click", _ => {const w = require("electron").remote.getCurrentWindow(); w.close(); w.destroy();})');
         }
-    });
+    };
+    win.webContents.once('did-finish-load', chatPopoutLoaded);
+    // Incase someone refreshes the popout
+    win.webContents.on('did-navigate', chatPopoutLoaded);
     win.loadURL(window.location.href);
 };
 
@@ -53,7 +59,7 @@ const ChannelPopoutInjectHTML = function injectHTML(icon){
                 </g>
             </svg>
         </div>`;
-        icon.parentNode.prepend(wrapper.firstChild);
+        icon.prepend(wrapper.firstChild);
         document.getElementsByName("ChannelPopout")[0].onmouseenter = ChannelPopoutOnMouseEnter;
         document.getElementsByName("ChannelPopout")[0].onmouseleave = ChannelPopoutOnMouseLeave;
         document.getElementsByName("ChannelPopout")[0].onmouseup = ChannelPopoutOnMouseClick;
@@ -66,7 +72,7 @@ const ChannelPopoutRemoveHTML = function removeHTML(){
 
 
 var ChannelPopouts = (() => {
-    const config = {"info":{"name":"ChannelPopouts","authors":[{"name":"Green","discord_id":"80593258903773184","github_username":"Curtis-D"}],"version":"1.1.4","description":"Allows you to popout DMs/Servers to view more than one DM/Server at a time.","github":"","github_raw":"https://raw.githubusercontent.com/Curtis-D/ChannelPopouts/master/ChannelPopouts.plugin.js"},"main":"index.js"};
+    const config = {"info":{"name":"ChannelPopouts","authors":[{"name":"Green","discord_id":"80593258903773184","github_username":"Curtis-D"}],"version":"1.1.5","description":"Allows you to popout DMs/Servers to view more than one DM/Server at a time.","github":"","github_raw":"https://raw.githubusercontent.com/Curtis-D/ChannelPopouts/master/ChannelPopouts.plugin.js"},"main":"index.js"};
 
     return !global.ZeresPluginLibrary ? class {
         getName() {return config.info.name;} getAuthor() {return config.info.authors.map(a => a.name).join(", ");} getDescription() {return config.info.description;} getVersion() {return config.info.version;}
@@ -75,6 +81,8 @@ var ChannelPopouts = (() => {
         const plugin = (Plugin, Library) => {
 
     const {Logger, Patcher, Settings} = Library;
+
+    let pinIconPath = "M22 12L12.101 2.10101L10.686 3.51401L12.101 4.92901L7.15096 9.87801V9.88001L5.73596 8.46501L4.32196 9.88001L8.56496 14.122L2.90796 19.778L4.32196 21.192L9.97896 15.536L14.222 19.778L15.636 18.364L14.222 16.95L19.171 12H19.172L20.586 13.414L22 12Z";
 
 
     return class ChannelPopouts extends Plugin {
@@ -85,10 +93,9 @@ var ChannelPopouts = (() => {
         onStart() {
             Logger.log("Started");
             Library.PluginUpdater.checkForUpdate(config.info.name, config.info.version, config.info.github_raw);
-            if(document.getElementsByName("Nova_Pin")[0] && !document.getElementsByName("ChannelPopout")[0]){
-                ChannelPopoutInjectHTML(document.getElementsByName("Nova_Pin")[0].parentNode);
+            if(document.querySelector(".toolbar-1t6TWx [d='" + pinIconPath + "']") && !document.getElementsByName("ChannelPopout")[0]){
+                ChannelPopoutInjectHTML(document.getElementsByClassName("toolbar-1t6TWx")[0]);
             }
-            
         }
 
         onStop() {
@@ -97,9 +104,9 @@ var ChannelPopouts = (() => {
         }
 
         observer(e){
-            if(e.addedNodes[0] && e.addedNodes[0].classList && e.addedNodes[0].getAttribute("name") === "Nova_Pin" && !document.getElementsByName("ChannelPopout")[0]){
+            if(e.target.querySelector(".toolbar-1t6TWx [d='" + pinIconPath + "']") && !document.getElementsByName("ChannelPopout")[0]){
                 let wrapper = document.createElement('div');
-                ChannelPopoutInjectHTML(e.addedNodes[0].parentNode);
+                ChannelPopoutInjectHTML(document.getElementsByClassName("toolbar-1t6TWx")[0]);
             }
         }
     };
