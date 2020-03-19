@@ -14,8 +14,9 @@ function ChannelPopoutOnMouseLeave(){
 
 function ChannelPopoutOnMouseClick(){
     const BrowserWindow = require("electron").remote.BrowserWindow;
-    const win = new BrowserWindow({webPreferences: {preload: require("path").join(require("electron").remote.require(require("path").join(require("electron").remote.app.getAppPath(), "common/paths")).getModulePath(), "discord_desktop_core/core.asar/app/mainScreenPreload.js")}, title: "Discord", frame: false, width: 800, height: 600 });
     const isMac = !require('process').platform === 'darwin';
+    const isLinux = !require('process').platform === 'linux';
+    const win = new BrowserWindow({webPreferences: {preload: require("path").join(require("electron").remote.require(require("path").join(require("electron").remote.app.getAppPath(), "common/paths")).getModulePath(), "discord_desktop_core/core.asar/app/mainScreenPreload.js")}, title: "Discord", frame: isLinux ? true : false, width: 800, height: 600 });
 
 
     if(!isMac){
