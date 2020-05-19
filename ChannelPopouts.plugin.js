@@ -13,6 +13,8 @@ function ChannelPopoutOnMouseLeave(){
 };
 
 function ChannelPopoutOnMouseClick(){
+    // ignore if it wasn't a left click
+    if(e.button !== 0) return;
     const BrowserWindow = require("electron").remote.BrowserWindow;
     const isMac = require('process').platform === 'darwin';
     const isLinux = require('process').platform === 'linux';
