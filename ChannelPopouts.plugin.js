@@ -12,7 +12,7 @@ function ChannelPopoutOnMouseLeave(){
     document.querySelector('.ChannelPopoutIcon').remove();
 };
 
-function ChannelPopoutOnMouseClick(){
+function ChannelPopoutOnMouseClick(e){
     // ignore if it wasn't a left click
     if(e.button !== 0) return;
     const BrowserWindow = require("electron").remote.BrowserWindow;
