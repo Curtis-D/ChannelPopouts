@@ -15,8 +15,7 @@ function ChannelPopoutOnMouseLeave(){
 function ChannelPopoutOnMouseClick(){
     const BrowserWindow = require("electron").remote.BrowserWindow;
     const isMac = !require('process').platform === 'darwin';
-    const isLinux = !require('process').platform === 'linux';
-    const win = new BrowserWindow({webPreferences: {preload: require("path").join(require("electron").remote.require(require("path").join(require("electron").remote.app.getAppPath(), "common/paths")).getModulePath(), "discord_desktop_core/core.asar/app/mainScreenPreload.js")}, title: "Discord", frame: isLinux ? true : false, width: 800, height: 600 });
+    const win = new BrowserWindow({webPreferences: {preload: require("path").join(require("electron").remote.require(require("path").join(require("electron").remote.app.getAppPath(), "common/paths")).getModulePath(), "discord_desktop_core/core.asar/app/mainScreenPreload.js")}, title: "Discord", frame: true, width: 800, height: 600 });
 
 
     if(!isMac){
@@ -34,6 +33,9 @@ function ChannelPopoutOnMouseClick(){
             win.webContents.executeJavaScript('document.getElementsByClassName("macButtonClose-MwZ2nf")[0].addEventListener("click", _ => {const w = require("electron").remote.getCurrentWindow(); w.close(); w.destroy();})');
         }
     };
+
+    // disable menu bar
+    win.setMenu(null);
     // Incase someone refreshes the popout, did-navigate is used instead of did-finish-load
     win.webContents.on('did-navigate', chatPopoutLoaded);
     win.loadURL(window.location.href);
@@ -72,7 +74,7 @@ const ChannelPopoutRemoveHTML = function removeHTML(){
 
 
 var ChannelPopouts = (() => {
-    const config = {"info":{"name":"ChannelPopouts","authors":[{"name":"Green","discord_id":"80593258903773184","github_username":"Curtis-D"}],"version":"1.1.6","description":"Allows you to popout DMs/Servers to view more than one DM/Server at a time.","github":"","github_raw":"https://raw.githubusercontent.com/Curtis-D/ChannelPopouts/master/ChannelPopouts.plugin.js"},"main":"index.js"};
+    const config = {"info":{"name":"ChannelPopouts","authors":[{"name":"Green","discord_id":"80593258903773184","github_username":"Curtis-D"}],"version":"1.1.7","description":"Allows you to popout DMs/Servers to view more than one DM/Server at a time.","github":"","github_raw":"https://raw.githubusercontent.com/Curtis-D/ChannelPopouts/master/ChannelPopouts.plugin.js"},"main":"index.js"};
 
     return !global.ZeresPluginLibrary ? class {
         getName() {return config.info.name;} getAuthor() {return config.info.authors.map(a => a.name).join(", ");} getDescription() {return config.info.description;} getVersion() {return config.info.version;}
